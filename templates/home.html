@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+
+{% block head %}
+    <title>Item List</title>
+    <style media="screen">
+        /* Home page specific styles go here */
+        form {
+            height: 600px;
+            width: 450px;
+            background-color: rgba(255,255,255,0.13);
+            position: absolute;
+            transform: translate(-50%,-50%);
+            top: 50%;
+            left: 50%;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255,255,255,0.1);
+            box-shadow: 0 0 40px rgba(8,7,16,0.6);
+            padding: 50px 35px;
+        }
+        form * {
+            font-family: 'Poppins',sans-serif;
+            color: #ffffff;
+            letter-spacing: 0.5px;
+            outline: none;
+            border: none;
+        }
+        form h3 {
+            font-size: 32px;
+            font-weight: 500;
+            line-height: 42px;
+            text-align: center;
+        }
+        label {
+            display: block;
+            margin-top: 30px;
+            font-size: 16px;
+            font-weight: 500;
+        }
+        input {
+            display: block;
+            height: 40px;
+            width: 100%;
+            background-color: rgba(255,255,255,0.07);
+            border-radius: 3px;
+            padding: 0 10px;
+            margin-top: 2px;
+            font-size: 14px;
+            font-weight: 300;
+        }
+        ::placeholder {
+            color: #e5e5e5;
+        }
+        button {
+            margin-top: 14px;
+            width: 100%;
+            background-color: #ffffff;
+            color: #080710;
+            padding: 15px 0;
+            font-size: 18px;
+            font-weight: 600;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .logout-container {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+        button.logout-btn {
+            background-color: #ffffff;
+            color: #080710;
+            padding: 15px 20px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <!-- Home page specific content goes here -->
+    <form action="{% url 'add_item' %}" method="post">
+        {% csrf_token %}
+        <h3>Add Item Here:</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Items</th>
+                    <th style="padding-left: 100px;">Price (£)</th>
+                </tr>
+            </thead>
+            <tbody id="itemTableBody">
+                {% for item in items %}
+                <tr>
+                    <td>{{ item.name }}</td>
+                    <td style="padding-left: 100px;">{{ item.price }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Popup content -->
+        <div id="popup" class="popup">
+
+            <label for="item_name">Item Name:</label>
+            <input type="text" name="item_name" required>
+        
+            <label for="price">Price (£):</label>
+            <input type="number" name="price" id="price">
+
+            <button type="submit">Add Item</button>
+            <button type="submit" onclick="goToSummary()">Summary</button>
+        </div>
+    </form>
+    <div class="logout-container">
+        <button class="logout-btn" onclick="logout()">Logout</button>
+    </div>
+
+    <script>
+    // JavaScript function to navigate to the specified URL
+    function goToSummary() {
+        window.location.href = "{% url 'summary' %}";
+    }
+    function logout() {
+        window.location.href = "{% url 'logout' %}";
+    }
+    </script>
+{% endblock %}
